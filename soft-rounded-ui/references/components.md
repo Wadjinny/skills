@@ -2,6 +2,8 @@
 
 Copy-paste CSS for every component in the system. All snippets assume the design tokens from SKILL.md are defined on `:root`, including the dark-mode overrides.
 
+Rule 0 in SKILL.md (flat, no boxes inside boxes) applies to every recipe: a card or glass tile never holds a button, input, or other box, and controls sit directly on the page or the gradient band.
+
 ## Contents
 
 1. [Base / reset](#base--reset)
@@ -96,11 +98,10 @@ No borders. Elevation only, and no shadow in dark mode (the token is `none` ther
 
 ## Pill navigation & tabs
 
-Horizontal nav for dashboards. The active tab is the brand gradient, not flat indigo.
+Horizontal nav for dashboards. The active tab is the brand gradient, not flat indigo. No container behind the tabs.
 
 ```css
-.tabs{display:flex;gap:4px;background:var(--white);border-radius:var(--r-pill);
-      padding:5px;box-shadow:var(--sh-card)}
+.tabs{display:flex;gap:4px}
 .tabs button{padding:9px 20px;border-radius:var(--r-pill);font-size:13px;
              color:var(--g500);font-weight:500;transition:.15s}
 .tabs button:hover{color:var(--g900)}
@@ -126,11 +127,11 @@ tabs.addEventListener('click', e => {
 
 ## Bottom tab bar
 
-For phone apps. One tab per main section. The gradient pill on the icon is the selected state — do not add a second focus ring.
+For phone apps. One tab per main section. The gradient pill on the icon is the selected state — do not add a second focus ring. The bar is a flat full-width strip, not a floating rounded box.
 
 ```css
-.tabbar{display:flex;gap:4px;background:var(--white);border-radius:24px;padding:6px;
-        box-shadow:var(--sh-card);margin:8px 18px 12px}
+.tabbar{display:flex;gap:4px;background:var(--white);border-top:1px solid var(--g100);
+        padding:6px 18px 12px}
 .tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
                padding:6px 0;border-radius:18px;color:var(--g400);font-size:11px;font-weight:700}
 .tabbar button .ico{width:44px;height:28px;border-radius:var(--r-pill);

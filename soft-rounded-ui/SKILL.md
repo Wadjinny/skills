@@ -3,8 +3,8 @@ name: soft-rounded-ui
 description: >-
   Ilyas's "Soft & Rounded" design system — indigo-to-violet gradients, glass
   tiles on a gradient header, tinted buttons, colored icon bubbles, status
-  colors, and automatic dark mode. Pill navigation, floating cards, and soft
-  shadows. Use this skill whenever building, styling, or restyling ANY user
+  colors, and automatic dark mode. Flat layout with no boxes inside boxes,
+  pill navigation, and soft shadows. Use this skill whenever building, styling, or restyling ANY user
   interface for Ilyas's projects, including dashboards, landing pages, admin
   panels, forms, mockups, prototypes, phone apps, and HTML/React components,
   or when the user mentions "my design", "my style", "soft rounded", "house
@@ -14,11 +14,11 @@ description: >-
 
 # Soft & Rounded UI
 
-A design system for sleek, rounded interfaces. The signature is an indigo-to-violet gradient header, glass tiles for the numbers that matter, tinted (never white-on-white) controls, one colored icon per card, and meaning colors for status. Cards still float on a soft background with shadows instead of borders. Dark mode follows the system automatically.
+A design system for sleek, rounded interfaces. The signature is an indigo-to-violet gradient header, glass tiles for the numbers that matter, tinted (never white-on-white) controls, one colored icon per card, and meaning colors for status. The layout is flat: one layer of surfaces on the page, never a box inside a box. Dark mode follows the system automatically.
 
 ## The one-paragraph mental model
 
-Every screen opens with a gradient band (indigo `#4F46E5` to violet `#9333EA`). The title sits on that band in white, and the few facts the user checks first (status, a level, a count) sit under it as translucent glass tiles. Below the band, white cards float on a pale lilac-gray canvas. The main action is a gradient pill. Secondary actions are a light violet fill with violet text, so they stay visible on a white card. Each card gets one colored icon bubble. Status uses green, amber, and rose. Everything interactive is a pill or a 14px squircle. If a decision is unclear, choose the softer, rounder option, and put color where it carries meaning.
+Every screen opens with a gradient band (indigo `#4F46E5` to violet `#9333EA`). The title sits on that band in white, and the few facts the user checks first (status, a level, a count) sit under it as translucent glass tiles. Below the band, content sits on a pale lilac-gray canvas. Sections are separated by headings, spacing, and hairlines; a white card is only for read-only content (stats, lists, charts), never for wrapping controls. The main action is a gradient pill. Secondary actions are a light violet fill with violet text. Each card gets one colored icon bubble. Status uses green, amber, and rose. Everything interactive is a pill or a 14px squircle. If a decision is unclear, choose the softer, rounder option, and put color where it carries meaning.
 
 ## Design tokens
 
@@ -90,9 +90,15 @@ Glass tiles and glass buttons sit on the gradient. They stay `rgba(255,255,255,.
 
 ## Non-negotiable rules
 
+0. **Flat: no boxes inside boxes.** Count the visible surfaces from the page inward (page or gradient band → box → box). Never go past one box. A box is anything with its own fill, border, or shadow: card, glass tile, tinted button, input, tab track, panel. So:
+   - Controls (buttons, inputs, switches, selects) sit directly on the page or the gradient band, never inside a card, glass tile, or other container.
+   - Group controls with a section heading, spacing (~24px between sections), and a 1px `--g100` hairline, not with a card.
+   - Tabs and segmented choices have no track behind them. Mark the active one with its own fill or an underline bar.
+   - A card or glass tile may hold text, numbers, icons, and small inline marks (icon bubble, status pill, dot), but no controls or other boxes.
+   - When restyling an existing screen, remove wrapper boxes first; don't add a lighter box to fix contrast.
 1. **No borders on cards.** Separation comes from the card-on-canvas contrast plus `--sh-card`. Inside a card, use a 1px `--g100` hairline to divide rows. In dark mode the lighter card is enough; skip the shadow.
 2. **The gradient is the brand.** Header, selected pills, the primary button, progress fills, and the one feature card use `linear-gradient(90deg, var(--grad-start), var(--grad-end))` or the header pair for large bands. Flat indigo is for text, icons, and focus rings.
-3. **Secondary controls are tinted.** A secondary button is `--violet-soft` fill with `--violet-text`. A white button on a white card is a bug.
+3. **Secondary controls are tinted.** A secondary button is `--violet-soft` fill with `--violet-text`. A white button on a white surface is a bug.
 4. **One main action per view.** That action is the gradient pill with `--sh-pop`. Other buttons stay tinted.
 5. **Status has meaning colors.** Ready / success = green. Needs attention = amber. Failed / blocked = rose. In progress = indigo tint. Neutral = gray. Do not use these colors as decoration.
 6. **One accent per card icon.** Cycle pink, green, amber, sky, indigo, and violet so neighboring cards are easy to tell apart. Charts stay on the brand gradient plus one or two of those accents, not every hue at once.
@@ -119,13 +125,14 @@ Sentence case everywhere. Table headers are the one sanctioned uppercase, and on
 
 Full copy-paste CSS lives in `references/components.md`. Read it before writing markup. The essentials:
 
-- **Gradient header**: full-width band, `linear-gradient(135deg, var(--header-start), var(--header-end))`, white title, two soft white circles as decoration (about 10% and 7% white, clipped so they don't cover text). Optional glass tiles in a row under the title. Page content overlaps the band's bottom edge by about 26px.
-- **Glass tile**: 16px radius, `rgba(255,255,255,.16)` fill, 1px `rgba(255,255,255,.22)` border, white value, caption at 85% white. An optional 8px status dot.
-- **Glass button**: pill, `rgba(255,255,255,.20)` fill, 1px `rgba(255,255,255,.30)` border, white bold text. Only for actions that sit on the band.
-- **Card**: `--white` bg, `--r-card`, ~20–22px padding, `--sh-card`. Hover lifts to `--sh-hover` in light mode.
+- **Gradient header**: full-width band, `linear-gradient(135deg, var(--header-start), var(--header-end))`, white title, two soft white circles as decoration (about 10% and 7% white, clipped so they don't cover text). Optional glass tiles in a row under the title. Controls on the band (a device picker, a connect button) sit directly on the gradient, not inside a glass tile. Page content starts below the band; don't overlap it with cards.
+- **Glass tile**: 16px radius, `rgba(255,255,255,.16)` fill, 1px `rgba(255,255,255,.22)` border, white value, caption at 85% white. An optional 8px status dot. Read-only: never put a button or input in it.
+- **Glass button**: pill, `rgba(255,255,255,.20)` fill, 1px `rgba(255,255,255,.30)` border, white bold text. Only for actions that sit on the band. A key action on the band can be a solid white pill with indigo text instead.
+- **Card**: `--white` bg, `--r-card`, ~20–22px padding, `--sh-card`. Hover lifts to `--sh-hover` in light mode. Read-only content only (rule 0). Settings and forms are flat sections, not cards.
 - **Card title**: a 34px squircle bubble at 14% of the accent (22% in dark mode) with the accent icon, then the heading.
-- **Top pill nav** (dashboards): white pill container, active tab filled with the brand gradient and white text.
-- **Bottom tab bar** (phone apps): a floating white bar, about 24px radius, one tab per section. The selected tab's icon sits in a small gradient pill; its label is `--violet`. Unselected icons and labels are `--g400`. No extra focus rectangle.
+- **Top pill nav** (dashboards): tabs sit directly on the page with no container. Active tab is a brand-gradient pill with white text; inactive tabs are plain `--g500` text.
+- **Bottom tab bar** (phone apps): a full-width `--white` strip with a `--g100` hairline on top (no floating rounded bar), one tab per section. The selected tab's icon sits in a small gradient pill; its label is `--violet`. Unselected icons and labels are `--g400`. No extra focus rectangle.
+- **Tabs on the gradient band**: plain white labels, inactive at 60% white, active marked by a short 3px white underline bar. No glass track behind them.
 - **Primary button**: gradient pill, white text, `--sh-pop`. Disabled = `--g200` fill and `--g400` text, no shadow.
 - **Secondary button**: `--violet-soft` pill, `--violet-text`. Disabled = `--g100` / `--g300`.
 - **Input**: 1.5px `--g200` border, `--r-ctrl`. Focus = indigo border plus a 3px `--indigo-soft` ring.
@@ -135,16 +142,17 @@ Full copy-paste CSS lives in `references/components.md`. Read it before writing 
 
 ## Layout
 
-- **Phone apps.** Gradient header (with the status bar covered by the same gradient, so scrolled content never shows through light status icons), cards overlapping the band, a compact bottom tab bar for the app's main sections. Keep the bar clear of the system navigation inset.
-- **Dashboards.** Centered container, max-width 1240–1280px, on `--bg`. A top pill nav (logo squircle, tabs, search pill, icon button, avatar), then the gradient header with glass tiles, then the card grid. 16px gaps. Asymmetric columns (`1.9fr 1fr`) rather than equal halves. Collapse to one column below ~1000px, and hide the search pill on small screens.
+- **Phone apps.** Gradient header (with the status bar covered by the same gradient, so scrolled content never shows through light status icons), flat sections below it, a compact bottom tab bar for the app's main sections. Keep the bar clear of the system navigation inset.
+- **Dashboards.** Centered container, max-width 1240–1280px, on `--bg`. A top nav row directly on the page (logo squircle, tabs, search pill, icon button, avatar), then the gradient header with glass tiles, then the card grid of read-only content. 16px gaps. Asymmetric columns (`1.9fr 1fr`) rather than equal halves. Collapse to one column below ~1000px, and hide the search pill on small screens.
 - Generous card padding (~20–22px). Let stats breathe.
 
 ## Working reference
 
-`assets/dashboard-template.html` is a complete dashboard in this style, including the gradient header, glass tiles, tinted buttons, status colors, and dark mode. When building something new, skim it first and reuse its patterns. It is the ground truth if these instructions and your instincts disagree. For a phone app, keep the same tokens and swap the top pill nav for the bottom tab bar.
+`assets/dashboard-template.html` is a complete dashboard in this style, including the gradient header, glass tiles, tinted buttons, status colors, and dark mode. When building something new, skim it first and reuse its patterns. It is the ground truth for tokens and component look. Where it nests boxes (a nav pill container, controls inside cards), rule 0 wins. For a phone app, keep the same tokens and swap the top pill nav for the bottom tab bar.
 
 ## Common mistakes to avoid
 
+- Boxes inside boxes: a button inside a glass tile inside the header, a settings card holding inputs and buttons, a tab track holding a selected pill. Flatten to one layer.
 - White secondary buttons on white cards.
 - A flat indigo primary button. The brand action is the gradient.
 - Using green, amber, or rose as decoration. Those are status colors.
